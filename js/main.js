@@ -1,21 +1,32 @@
-let shader_sharpen;
+"use strict";
+
 let img;
+let shader_test;
+
+function preload() {
+	img = loadImage("./images/cow.jpg");	
+	shader_test = loadShader("./js/shaders/blank.vert", "./js/shaders/invert.frag");
+}
 
 function setup() {
 	createCanvas(640, 480, WEBGL);
-	
-	img = loadImage("../images/something.jpg");	
-	shader_sharpen = new p5.Shader(this._renderer, vert, frag);
 }
 
 function draw() {	
-	shader_sharpen.setUniform("tex0", img);
-	shader_sharpen.setUniform("iResolution", [width, height,0]);
-	shader_sharpen.setUniform("imgWidth", img.width);
-	shader_sharpen.setUniform("imgHeight", img.height);
-	shader(shader_sharpen);
-	
-	translate(-width/2, -height/2);
-  	noStroke();
+	background(0);
+
+	texture(img);
+	plane(500);
+
+	push();
+	translate(-width/2, -height/2, 0);
+	for (let i=0; i<10; i++) {
+		fill(255,0,0);
+		rect(random(width), random(height),20,20);
+	}
+	pop();
+
+	shader(shader_test);
+	shader_test.setUniform("tex0", get());
 	rect(0, 0, width, height, 1, 1);
 }
